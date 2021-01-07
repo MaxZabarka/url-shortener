@@ -22,7 +22,6 @@ const urls = {
 	new: "google.com",
 };
 
-// app.set("view engine", "pug");
 app.set("view engine", "ejs");
 
 app.set("views", "views");
@@ -59,6 +58,7 @@ app.post("/create", (req, res, next) => {
 		url: newValue,
 		key: newKey,
         domainPort: req.get("Host"),
+        title:"Link Created!"
 	});
 
 });
