@@ -39,11 +39,11 @@ app.post("/create", (req, res, next) => {
             if (!validUrlEnding(req.body.custom)) {
                 newKey = req.body.custom
             } else {
-                res.sendFile(path.join(__dirname, "views", "invalid-input.html"))
+                res.render("message.ejs",{title:"Invalid input"})
                 return
             }
         } else {
-            res.sendFile(path.join(__dirname, "views", "taken.html"))
+            res.render("message.ejs",{title:"Link ending already taken"})
             return
         }
 
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 	if (url) {
 		res.redirect(url);
 	} else {
-		res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
+        res.render("message.ejs",{title:"Link Not Found"})
 	}
 });
 
