@@ -22,7 +22,9 @@ const urls = {
 	new: "google.com",
 };
 
-app.set("view engine", "pug");
+// app.set("view engine", "pug");
+app.set("view engine", "ejs");
+
 app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -53,7 +55,7 @@ app.post("/create", (req, res, next) => {
     }
 
 	urls[newKey] = newValue;
-	res.render("url-created.pug", {
+	res.render("url-created.ejs", {
 		url: newValue,
 		key: newKey,
         domainPort: req.get("Host"),
