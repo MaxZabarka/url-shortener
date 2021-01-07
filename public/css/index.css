@@ -29,3 +29,7 @@ button:hover {
     background-color:white;
     color: #0462c2;
 }
+.custom {
+    margin: 1rem;
+    width: 20vw;
+}

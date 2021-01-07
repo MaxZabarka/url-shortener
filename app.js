@@ -1,7 +1,12 @@
 const path = require("path");
 const express = require("express");
 const nanoid = require("nanoid");
-const { url } = require("inspector");
+
+
+
+function validUrlEnding(url) {
+    return /[^ModuleSymbhasOwnPr\-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW\/]/.test(url)
+}
 
 function addhttp(url) {
 	if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
@@ -26,9 +31,27 @@ app.use(express.urlencoded({ extended: false }));
 app.post("/create", (req, res, next) => {
     const newValue = addhttp(req.body.url);
     let newKey
-    while(urls[newKey]) {
-        newKey = nanoid.customAlphabet(nanoid.urlAlphabet, 7)();
+    // console.log(validUrlEnding(req.body.custom));
+    if (req.body.custom) {
+        if (!urls[req.body.custom]) {
+            if (!validUrlEnding(req.body.custom)) {
+                newKey = req.body.custom
+            } else {
+                res.sendFile(path.join(__dirname, "views", "invalid-input.html"))
+                return
+            }
+        } else {
+            res.sendFile(path.join(__dirname, "views", "taken.html"))
+            return
+        }
+
+
+    } else {
+        while(urls[newKey]) {
+            newKey = nanoid.customAlphabet(nanoid.urlAlphabet, 7)();
+        }
     }
+
 	urls[newKey] = newValue;
 	res.render("url-created.pug", {
 		url: newValue,
