@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Link Shortened!
+        link(rel="stylesheet", href="/css/common.css")
+
+    body
+        .white-box
+            h1 Link Shortened!
+            p Shortened Link: 
+                br
+                a(href=key, target="_blank") http://#{domainPort}/#{key}
+            p
+                a(href="/") Shorten Another Link

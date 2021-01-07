@@ -1,0 +1,47 @@
+body {
+	background: rgb(9, 75, 121);
+	background: linear-gradient(
+		90deg,
+		rgba(9, 75, 121, 1) 0%,
+		rgba(0, 117, 255, 1) 100%
+	);
+	color: white;
+	font-family: sans-serif;
+	display: flex;
+	flex-direction: column;
+	height: 90vh;
+	justify-content: center;
+	align-items: center;
+}
+.white-box {
+    text-align: center;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	display: flex;
+	border-radius: 15px;
+	height: 70vh;
+	width: 70vw;
+	color: black;
+	background-color: white;
+}
+@media screen and (max-width:600px) {
+    p {
+        font-size: 1rem;
+    }
+    
+}
+
+p {
+    margin: 1rem;
+    font-size: 1.3rem;
+}
+
+a {
+	transition: color 0.3s ease;
+	color: #0462c2;
+	text-decoration: none;
+}
+a:hover {
+	color: orange;
+}
