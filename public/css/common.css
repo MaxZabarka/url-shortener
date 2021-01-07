@@ -45,3 +45,25 @@ a {
 a:hover {
 	color: orange;
 }
+.url {
+	word-break:break-all;
+}
+i {
+	color:white;
+	text-align: center;
+	position: fixed;
+	font-size: 2em;
+	transition: font-size 0.3s;
+  
+  }
+  .fa-github {
+	left: 20px;
+	bottom: 20px
+  }
+  .fa-instagram-square {
+	left: 70px;
+	bottom: 20px;
+  }
+  i:hover {
+	font-size: 2.2em;
+  }

@@ -5,12 +5,18 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Link Shortened!
         link(rel="stylesheet", href="/css/common.css")
+        script(src="https://kit.fontawesome.com/a076d05399.js")
 
     body
         .white-box
             h1 Link Shortened!
             p Shortened Link: 
                 br
-                a(href=key, target="_blank") http://#{domainPort}/#{key}
+                a(href=key, target="_blank").url http://#{domainPort}/#{key}
             p
                 a(href="/") Shorten Another Link
+    footer
+        a(target="_blank", href="https://instagram.com/max.zabarka")
+            i.fab.fa-instagram-square
+        a(target="_blank", href="https://github.com/MaxZabarka")
+            i.fab.fa-github
