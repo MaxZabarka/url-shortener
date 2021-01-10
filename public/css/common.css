@@ -21,8 +21,10 @@ body {
 	justify-content: center;
 	display: flex;
 	border-radius: 15px;
+	max-height: 600px;
+	width: 70vw;
 	height: 70vh;
-	width: 50vw;
+	max-width: 800px;
 	min-width: 250px;
 	color: black;
 	background-color: white;

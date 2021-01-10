@@ -1,26 +1,12 @@
 const path = require("path");
 const express = require("express");
 const nanoid = require("nanoid");
+const urlHelpers = require("./util/url.js")
 
 
-
-function validUrlEnding(url) {
-    return /[^ModuleSymbhasOwnPr\-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW\/]/.test(url)
-}
-
-function addhttp(url) {
-	if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
-		url = "http://" + url;
-	}
-	return url;
-}
 
 const app = express();
-const urls = {
-	abc: "google.com",
-	123: "https://instagram.com",
-	new: "google.com",
-};
+const Urls = require("./models/Urls")
 
 app.set("view engine", "ejs");
 
@@ -30,36 +16,49 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
 
 app.post("/create", (req, res, next) => {
-    const newValue = addhttp(req.body.url);
+    const newValue = urlHelpers.addHttp(req.body.url);
     let newKey
-    // console.log(validUrlEnding(req.body.custom));
-    if (req.body.custom) {
-        if (!urls[req.body.custom]) {
-            if (!validUrlEnding(req.body.custom)) {
-                newKey = req.body.custom
+    const customUrlInput = req.body.custom
+    //User used a custom path?
+    if (customUrlInput) {
+        //path isn't already taken?
+        Urls.query(customUrlInput).then((result) => {
+            if (!result) {
+                //path is valid?
+                if (!urlHelpers.validUrlEnding(customUrlInput)) {
+                    newKey = customUrlInput
+                    if (newKey.length > 7) {
+                        res.render("message.ejs",{title:"Custom URL Ending too long"})
+
+                    }
+                    Urls.save(newValue,newKey)
+                    res.render("url-created.ejs", {
+                        url: newValue,
+                        key: newKey,
+                        domainPort: req.get("Host"),
+                        title:"Link Created!"
+                    });
+                } else {
+                    res.render("message.ejs",{title:"Invalid input"})
+                    return
+                }
             } else {
-                res.render("message.ejs",{title:"Invalid input"})
+                res.render("message.ejs",{title:"Link ending already taken"})
                 return
             }
-        } else {
-            res.render("message.ejs",{title:"Link ending already taken"})
-            return
-        }
-
+        })
 
     } else {
-        while(urls[newKey]) {
-            newKey = nanoid.customAlphabet(nanoid.urlAlphabet, 7)();
-        }
+        newKey = nanoid.customAlphabet(nanoid.urlAlphabet, 7)();
+        Urls.save(newValue,newKey)
+        res.render("url-created.ejs", {
+            url: newValue,
+            key: newKey,
+            domainPort: req.get("Host"),
+            title:"Link Created!"
+        });
     }
 
-	urls[newKey] = newValue;
-	res.render("url-created.ejs", {
-		url: newValue,
-		key: newKey,
-        domainPort: req.get("Host"),
-        title:"Link Created!"
-	});
 
 });
 
@@ -68,14 +67,16 @@ app.get("/", (req, res, next) => {
 	res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-app.use((req, res, next) => {
+app.use("/", (req, res, next) => {
 	//Url logic
-	const url = urls[req.url.replace("/", "")];
-	if (url) {
-		res.redirect(url);
-	} else {
-        res.render("message.ejs",{title:"Link Not Found"})
-	}
+	Urls.query(req.url.replace("/", "")).then(long_url => {
+        if (long_url) {
+            res.redirect(long_url);
+        } else {
+            res.render("message.ejs",{title:"Link Not Found"})
+        }
+    });
+
 });
 
 app.listen(3000);
