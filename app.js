@@ -71,6 +71,6 @@ app.use("/", (req, res, next) => {
     }
   });
 });
-
-console.log("Starting on port 8080")
-app.listen(8080);
+const port = process.env.PORT || 5000;
+console.log("Starting on port " + port);
+app.listen(port);
