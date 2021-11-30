@@ -8,4 +8,6 @@ function addHttp(url) {
 	}
 	return url;
 }
+const Urls = require('../models/Urls');
+
 module.exports = {validUrlEnding, addHttp}

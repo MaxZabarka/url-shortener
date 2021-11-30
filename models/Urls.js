@@ -1,31 +1,41 @@
 db = require("../util/database.js");
 class Urls {
-	static fetchAll() {
-		return db.execute("SELECT * from urls").then(([rows, fieldData]) => {
-			return rows;
-		});
-    }
-    
-	static save(long_url, short_url) {
-		return db.execute(
-			"INSERT INTO urls (long_url,short_url) VALUES (?, ?)",
-			[long_url, short_url]
-		);
-	}
+  static printAll() {
+    return db.all("SELECT * from urls", [], (err, result) => {
+      if (err) throw err;
+      console.log(result);
+    });
+  }
 
-	static query(short_url) {
-		return db
-			.execute("SELECT * FROM urls WHERE urls.short_url = ?", [short_url])
-			.then((result) => {
-				return result[0][0].long_url;
-			})
-			.catch((err) => {
-				if (err instanceof TypeError) {
-					return null;
-				} else {
-					throw err;
-				}
-			});
-	}
+  static save(long_url, short_url) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        "INSERT INTO urls (long_url,short_url) VALUES (?, ?)",
+        [long_url, short_url],
+        (err) => {
+          if (err) reject(err);
+          resolve();
+        }
+      );
+    });
+  }
+
+  static query(short_url) {
+    return new Promise((resolve, reject) => {
+      db.get(
+        "SELECT * FROM urls WHERE short_url = ?",
+        [short_url],
+        (err, result) => {
+          if (err) {
+            throw reject(err);
+          }
+          if (!result) {
+            return resolve(null);
+          }
+          return resolve(result.long_url);
+        }
+      );
+    });
+  }
 }
 module.exports = Urls;
